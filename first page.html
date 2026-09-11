@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RaktSetu - Blood Donation App</title>
+    
+    <!-- Google Fonts for a clean, modern look -->
+    <link href="https://googleapis.com" rel="stylesheet">
+
+    <!-- Merged CSS Styles -->
+    <style>
+        /* --- Global Reset & Variables --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-red: #E63946;
+            --dark-red: #C32F3A;
+            --bg-light: #F8F9FA;
+            --text-main: #1D3557;
+            --text-muted: #6C757D;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background-color: #EAEAEA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- App Mobile Frame Mock --- */
+        .app-container {
+            width: 100%;
+            max-width: 420px; /* Dimensions match an iPhone/Android Screen */
+            height: 90vh;
+            min-height: 650px;
+            background-color: var(--bg-light);
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid #333; /* Outer bezel mockup */
+        }
+
+        /* --- Header Styling --- */
+        .app-header {
+            background: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #EDEDED;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .drop-icon {
+            font-size: 1.4rem;
+        }
+
+        .notification-bell {
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* --- Scrollable Content Body --- */
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 90px; /* Prevents navigation menu from blocking text */
+        }
+
+        /* Hide scrollbar tracks for a cleaner app aesthetic */
+        .app-content::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        /* --- Emergency Banner --- */
+        .emergency-card {
+            background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(230, 57, 70, 0.2);
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .emergency-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .emergency-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary-red);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Grid Metrics --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-box h3 {
+            font-size: 1.4rem;
+            color: var(--text-main);
+        }
+
+        .stat-box p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* --- Action Menus --- */
+        .menu-section h3 {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .menu-item {
+            background: white;
+            padding: 16px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .menu-item:active {
+            background: #F1F1F1;
+        }
+
+        .menu-icon {
+            font-size: 1.5rem;
+            background: #FFEBEB;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+        }
+
+        .menu-text {
+            flex: 1;
+        }
+
+        .menu-text h4 {
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .menu-text p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .arrow {
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        /* --- Persistent Bottom App Navigation --- */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #EDEDED;
+            padding-bottom: 5px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-muted);
+            gap: 4px;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .nav-item.active {
+            color: var(--primary-red);
+        }
+
+        .SOS-nav .nav-icon {
+            color: var(--primary-red);
+            font-size: 1.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Container mimicking a smartphone screen boundary -->
+    <div class="app-container">
+        
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="logo">
+                <span class="drop-icon">🩸</span>
+                <h1>Raktsetu</h1>
+            </div>
+            <span class="notification-bell">🔔</span>
+        </header>
+
+        <!-- Main Scrollable Content Area -->
+        <main class="app-content">
+            
+            <!-- Hero / Urgent Broadcast Section -->
+            <section class="emergency-card">
+                <div class="badge">URGENT CALL</div>
+                <h2>O- Negative Needed</h2>
+                <p>City Hospital • 1.2 km away</p>
+                <button class="btn-primary">Donate Now</button>
+            </section>
+
+            <!-- Quick Stats Grid -->
+            <section class="stats-grid">
+                <div class="stat-box">
+                    <h3>1,240</h3>
+                    <p>Active Donors</p>
+                </div>
+                <div class="stat-box">
+                    <h3>85</h3>
+                    <p>Requests Met</p>
+                </div>
+            </section>
+
+            <!-- Action Options Menu -->
+            <section class="menu-section">
+                <h3>Quick Actions</h3>
+                
+                <div class="menu-item">
+                    <div class="menu-icon">📅</div>
+                    <div class="menu-text">
+                        <h4>Schedule Donation</h4>
+                        <p>Find nearby blood banks & drives</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">📝</div>
+                    <div class="menu-text">
+                        <h4>Eligibility Check</h4>
+                        <p>Verify if you can donate today</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">🚨</div>
+                    <div class="menu-text">
+                        <h4>Request Blood</h4>
+                        <p>Create an emergency SOS broadcast</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Bottom Navigation Bar (Persistent like a mobile app) -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🔍</span>
+                <span class="nav-label">Search</span>
+            </a>
+            <a href="#" class="nav-item SOS-nav">
+                <span class="nav-icon">🚨</span>
+                <span class="nav-label">SOS</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Profile</span>
+                </a>
+        </nav>
+        </div>
+
+        <script>
+            //
+        </script>
+</body>
+</html>
