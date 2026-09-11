@@ -1,0 +1,6 @@
+{
+  "name": "Blood Donation & Emergency Network",
+  "description": "Real-time blood donation platform connecting local donors with hospitals, featuring emergency alerts, donor verification, biometric authentication, rewards, secure messaging, nearby center maps, and supply-demand analytics.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
